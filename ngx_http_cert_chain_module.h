@@ -66,46 +66,10 @@ static ngx_int_t ngx_http_auth_digest_worker_init(ngx_cycle_t *cycle);
 
 // module datastructures
 static ngx_command_t ngx_http_auth_digest_commands[] = {
-    {ngx_string("auth_digest"),
-     NGX_HTTP_MAIN_CONF | NGX_HTTP_SRV_CONF | NGX_HTTP_LOC_CONF |
-         NGX_HTTP_LMT_CONF | NGX_CONF_TAKE1,
-     ngx_http_auth_digest_set_realm, NGX_HTTP_LOC_CONF_OFFSET,
-     offsetof(ngx_http_auth_digest_loc_conf_t, realm), NULL},
-    {ngx_string("auth_digest_user_file"),
-     NGX_HTTP_MAIN_CONF | NGX_HTTP_SRV_CONF | NGX_HTTP_LOC_CONF |
-         NGX_HTTP_LMT_CONF | NGX_CONF_TAKE1,
-     ngx_http_auth_digest_set_user_file, NGX_HTTP_LOC_CONF_OFFSET,
-     offsetof(ngx_http_auth_digest_loc_conf_t, user_file), NULL},
     {ngx_string("auth_digest_timeout"), NGX_HTTP_MAIN_CONF | NGX_HTTP_SRV_CONF |
                                             NGX_HTTP_LOC_CONF | NGX_CONF_TAKE1,
      ngx_conf_set_sec_slot, NGX_HTTP_LOC_CONF_OFFSET,
      offsetof(ngx_http_auth_digest_loc_conf_t, timeout), NULL},
-    {ngx_string("auth_digest_expires"), NGX_HTTP_MAIN_CONF | NGX_HTTP_SRV_CONF |
-                                            NGX_HTTP_LOC_CONF | NGX_CONF_TAKE1,
-     ngx_conf_set_sec_slot, NGX_HTTP_LOC_CONF_OFFSET,
-     offsetof(ngx_http_auth_digest_loc_conf_t, expires), NULL},
-    {ngx_string("auth_digest_drop_time"),
-     NGX_HTTP_MAIN_CONF | NGX_HTTP_SRV_CONF | NGX_HTTP_LOC_CONF |
-         NGX_CONF_TAKE1,
-     ngx_conf_set_sec_slot, NGX_HTTP_LOC_CONF_OFFSET,
-     offsetof(ngx_http_auth_digest_loc_conf_t, drop_time), NULL},
-    {ngx_string("auth_digest_evasion_time"),
-     NGX_HTTP_MAIN_CONF | NGX_HTTP_SRV_CONF | NGX_HTTP_LOC_CONF |
-         NGX_CONF_TAKE1,
-     ngx_conf_set_sec_slot, NGX_HTTP_LOC_CONF_OFFSET,
-     offsetof(ngx_http_auth_digest_loc_conf_t, evasion_time), NULL},
-    {ngx_string("auth_digest_replays"), NGX_HTTP_MAIN_CONF | NGX_HTTP_SRV_CONF |
-                                            NGX_HTTP_LOC_CONF | NGX_CONF_TAKE1,
-     ngx_conf_set_num_slot, NGX_HTTP_LOC_CONF_OFFSET,
-     offsetof(ngx_http_auth_digest_loc_conf_t, replays), NULL},
-    {ngx_string("auth_digest_maxtries"),
-     NGX_HTTP_MAIN_CONF | NGX_HTTP_SRV_CONF | NGX_HTTP_LOC_CONF |
-         NGX_CONF_TAKE1,
-     ngx_conf_set_num_slot, NGX_HTTP_LOC_CONF_OFFSET,
-     offsetof(ngx_http_auth_digest_loc_conf_t, maxtries), NULL},
-    {ngx_string("auth_digest_shm_size"),
-     NGX_HTTP_MAIN_CONF | NGX_HTTP_SRV_CONF | NGX_CONF_TAKE1,
-     ngx_http_auth_digest_set_shm_size, 0, 0, NULL},
     ngx_null_command};
 
 static ngx_http_module_t ngx_http_cert_chain_module_ctx = {
