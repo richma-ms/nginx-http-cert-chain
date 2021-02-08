@@ -59,12 +59,6 @@ static ngx_int_t ngx_http_auth_digest_init(ngx_conf_t *cf) {
 
   *h = ngx_http_auth_digest_handler;
 
-  ngx_http_auth_digest_cleanup_timer =
-      ngx_pcalloc(cf->pool, sizeof(ngx_event_t));
-  if (ngx_http_auth_digest_cleanup_timer == NULL) {
-    return NGX_ERROR;
-  }
-
   shm_name = ngx_palloc(cf->pool, sizeof *shm_name);
   shm_name->len = sizeof("auth_digest");
   shm_name->data = (unsigned char *)"auth_digest";
@@ -72,14 +66,6 @@ static ngx_int_t ngx_http_auth_digest_init(ngx_conf_t *cf) {
   if (ngx_http_auth_digest_shm_size == 0) {
     ngx_http_auth_digest_shm_size = 4 * 256 * ngx_pagesize; // default to 4mb
   }
-
-  ngx_http_auth_digest_shm_zone =
-      ngx_shared_memory_add(cf, shm_name, ngx_http_auth_digest_shm_size,
-                            &ngx_http_cert_chain_module);
-  if (ngx_http_auth_digest_shm_zone == NULL) {
-    return NGX_ERROR;
-  }
-  ngx_http_auth_digest_shm_zone->init = ngx_http_auth_digest_init_shm_zone;
 
   return NGX_OK;
 }
@@ -91,15 +77,15 @@ static ngx_int_t ngx_http_auth_digest_worker_init(ngx_cycle_t *cycle) {
 
   // create a cleanup queue big enough for the max number of tree nodes in the
   // shm
-  ngx_http_auth_digest_cleanup_list =
-      ngx_array_create(cycle->pool, NGX_HTTP_AUTH_DIGEST_CLEANUP_BATCH_SIZE,
-                       sizeof(ngx_rbtree_node_t *));
+  // ngx_http_auth_digest_cleanup_list =
+  //     ngx_array_create(cycle->pool, NGX_HTTP_AUTH_DIGEST_CLEANUP_BATCH_SIZE,
+  //                      sizeof(ngx_rbtree_node_t *));
 
-  if (ngx_http_auth_digest_cleanup_list == NULL) {
-    ngx_log_error(NGX_LOG_EMERG, cycle->log, 0,
-                  "Could not allocate shared memory for auth_digest");
-    return NGX_ERROR;
-  }
+  // if (ngx_http_auth_digest_cleanup_list == NULL) {
+  //   ngx_log_error(NGX_LOG_EMERG, cycle->log, 0,
+  //                 "Could not allocate shared memory for auth_digest");
+  //   return NGX_ERROR;
+  // }
 
   ngx_connection_t *dummy;
   dummy = ngx_pcalloc(cycle->pool, sizeof(ngx_connection_t));
@@ -108,11 +94,6 @@ static ngx_int_t ngx_http_auth_digest_worker_init(ngx_cycle_t *cycle) {
   dummy->fd = (ngx_socket_t)-1;
   dummy->data = cycle;
 
-  ngx_http_auth_digest_cleanup_timer->log = ngx_cycle->log;
-  ngx_http_auth_digest_cleanup_timer->data = dummy;
-  ngx_http_auth_digest_cleanup_timer->handler = ngx_http_auth_digest_cleanup;
-  ngx_add_timer(ngx_http_auth_digest_cleanup_timer,
-                NGX_HTTP_AUTH_DIGEST_CLEANUP_INTERVAL);
   return NGX_OK;
 }
 
