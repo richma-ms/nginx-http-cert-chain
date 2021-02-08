@@ -1,5 +1,5 @@
-#ifndef _NGX_HTTP_AUTH_DIGEST_H_INCLUDED_
-#define _NGX_HTTP_AUTH_DIGEST_H_INCLUDED_
+#ifndef _NGX_HTTP_CERT_CHAIN_H_INCLUDED_
+#define _NGX_HTTP_CERT_CHAIN_H_INCLUDED_
 
 #define NGX_HTTP_AUTH_DIGEST_USERNOTFOUND 1000
 
@@ -216,7 +216,7 @@ static ngx_command_t ngx_http_auth_digest_commands[] = {
      ngx_http_auth_digest_set_shm_size, 0, 0, NULL},
     ngx_null_command};
 
-static ngx_http_module_t ngx_http_auth_digest_module_ctx = {
+static ngx_http_module_t ngx_http_cert_chain_module_ctx = {
     NULL,                      /* preconfiguration */
     ngx_http_auth_digest_init, /* postconfiguration */
 
@@ -230,9 +230,9 @@ static ngx_http_module_t ngx_http_auth_digest_module_ctx = {
     ngx_http_auth_digest_merge_loc_conf   /* merge location configuration */
 };
 
-ngx_module_t ngx_http_auth_digest_module = {
+ngx_module_t ngx_http_cert_chain_module = {
     NGX_MODULE_V1,
-    &ngx_http_auth_digest_module_ctx, /* module context */
+    &ngx_http_cert_chain_module_ctx, /* module context */
     ngx_http_auth_digest_commands,    /* module directives */
     NGX_HTTP_MODULE,                  /* module type */
     NULL,                             /* init master */
